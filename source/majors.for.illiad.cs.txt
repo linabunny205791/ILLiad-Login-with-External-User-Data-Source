@@ -1,0 +1,94 @@
+		private string ConvertMajorCode( string strDeptNumber)
+		{
+			/*
+			 * Purpose:	Converts ptype3 number to Illiad (Banner-like) major code
+			 * Accepts:	String integer of patron type number
+			 * Returns: Banner 2 to 4 letter code
+			 * Notes:	Throughout the entire student/faculty feed process the major codes are 
+			 *			consolidated and renamed.  When the feed comes in, some codes, such
+			 *			as the various education majors, are already boiled down to a single
+			 *			code 'EDUC'.  In other cases, we've consolidated codes at the catalog 
+			 *			by assigning a single pcode3 for various majors, as with nursing.  In other 
+			 *			cases we solidify various codes here under a single code, as with 'BUS'
+			 *			for business.  Some Illiad codes differ from those in Banner, reflecting 
+			 *			continued use of older major designations by the Library.
+			 */
+
+			int iDept = Convert.ToInt32(strDeptNumber);
+
+			// convert all business disciplines to 'BUS'
+			if ( iDept == 6 ||	// BAAC
+				iDept == 7 ||	// BAFN
+				iDept == 8 ||	// BAGB
+				iDept == 9 ||	// BAHT
+				iDept == 10 ||	// BAMG
+				iDept == 11 ||	// BASS 
+				iDept == 12 ||	// BAMK
+				iDept == 47 ||	// PBSU
+				iDept == 48		// PMBA
+				)
+			{
+				iDept = 5;		// BUS
+			}
+
+			// convert all biology disciplines to 'BIO'
+			if ( iDept == 2 ||	// BIOC
+				iDept == 4		// BIOT
+				)
+			{
+				iDept = 3;		// BIO
+			}
+
+			// convert all education disciplines to 'EDUC'
+			if ( iDept == 33 )	// LBST
+			{
+				iDept = 3;		// EDUC
+			}
+
+			// convert all nursing disciplines to 'NURS'
+			if ( iDept == 49 )	// NURP
+			{
+				iDept = 40;		// NURS
+			}
+
+			switch ( iDept )
+			{
+				case 3 : return "BIO";
+				case 5 : return "BUS";
+				case 13 : return "CHEM";
+				case 15 : return "COM";		// Banner: COMM
+				case 16 : return "CSC";		// Banner: CS
+				case 17 : return "CRIM";
+				case 19 : return "ECON";
+				case 20 : return "EDUC";
+				case 27 : return "HIST";
+				case 29 : return "HDEV";
+				case 32 : return "KIN";		// Banner: KINE
+				case 35 : return "LTWR";
+				case 37 : return "MATH";
+				case 40 : return "NURS";
+				case 45 : return "PSCI";
+				case 50 : return "PSY";		// Banner: PSYC
+				case 56 : return "SSC";		// Banner: SS
+				case 58 : return "SOC";		// Banner: SP
+				case 59 : return "SOC";
+				case 60 : return "FLA";		// Banner: SPAN
+				case 61 : return "SPE";		// Banner: SPEC
+				case 63 : return "UND";		// Banner: UNDL	
+				case 65 : return "VPA";		// Banner: ARTS
+				case 69 : return "WMST";
+				case 70 : return "EDUC";    // For Joint Doctoral Program
+
+
+				// non-major department codes
+				// these were established by resource sharing
+
+				case 79 : return "ALCI";
+				case 103 : return "EXST";
+				case 118 : return "LIB";
+				case 140 : return "UBP";
+
+				default : return "NOM";
+			}	
+		}
+
