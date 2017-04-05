@@ -30,7 +30,7 @@ namespace Illiad
 		private string _MoneyOwed;
 		private string _Status;
 		private string _DepartmentAbbreviation;
-        private string _ManualBlock;
+		private string _ManualBlock;
 		private DateTime _ExpirationDate;
 		private DateTime _CatalogUpdatedDate;
 		private DateTime _IlliadUpdatedDate;
@@ -103,11 +103,11 @@ namespace Illiad
 				{
 					strError += System.Configuration.ConfigurationSettings.AppSettings["errorExpired"];
 				}
-                if (CheckForManualBlock( _ManualBlock) != true)
-                {
-                    strError += System.Configuration.ConfigurationSettings.AppSettings["errorHoldOnRecord"];
-                }
-            }
+				if (CheckForManualBlock( _ManualBlock) != true)
+				{
+				    strError += System.Configuration.ConfigurationSettings.AppSettings["errorHoldOnRecord"];
+				}
+			}
 
 			// if all is good, otherwise log error, throw exception
 
@@ -240,7 +240,7 @@ namespace Illiad
 			string strFines = "";			// fines amount
 			string strUpdated = "";			// string version of date patron record in catalog updated
 			string strExpDate = "";			// string version of date patron record expired in catalog
-            string strMblock = "";           // any manual blocks or holds in pac record
+			string strMblock = "";           // any manual blocks or holds in pac record
 			string strError = "";			// error message to user
 
 			// normalize key if barcode
@@ -249,131 +249,131 @@ namespace Illiad
 
 			// get patron API dump from catalog
 			strResponse = SendRequest(strKey);
-            XmlDocument doc = new XmlDocument();
-            doc.Load(strResponse);
+			XmlDocument doc = new XmlDocument();
+			doc.Load(strResponse);
 
-            // Get xml nodes for each element in user data
-            XmlNodeList itemNodes = doc.SelectNodes("//entry");
-            foreach (XmlNode itemNode in itemNodes)
-            {
-                XmlNode fname = itemNode.SelectSingleNode("fname");
-                XmlNode lname = itemNode.SelectSingleNode("lname");
-                XmlNode UNIV_ID = itemNode.SelectSingleNode("UNIV_ID");
-                XmlNode otherid1 = itemNode.SelectSingleNode("OTHER_ID_1");
-                XmlNode almabarcode = itemNode.SelectSingleNode("BARCODE");
-                XmlNode username = itemNode.SelectSingleNode("username");
-                XmlNode groupid = itemNode.SelectSingleNode("groupid");
-                XmlNode email = itemNode.SelectSingleNode("email");
-                XmlNode phone = itemNode.SelectSingleNode("phone");
-                XmlNode streetaddr1 = itemNode.SelectSingleNode("streetaddr1");
-                XmlNode streetaddr2 = itemNode.SelectSingleNode("streetaddr2");
-                XmlNode city = itemNode.SelectSingleNode("city");
-                XmlNode state = itemNode.SelectSingleNode("state");
-                XmlNode zipcode = itemNode.SelectSingleNode("zipcode");
-                XmlNode blockstatus = itemNode.SelectSingleNode("blockstatus");
-                XmlNode deptid = itemNode.SelectSingleNode("deptid");
-                XmlNode fines = itemNode.SelectSingleNode("fines");
-                XmlNode expdate = itemNode.SelectSingleNode("expdate");
-                XmlNode moddate = itemNode.SelectSingleNode("moddate");
+			// Get xml nodes for each element in user data
+			XmlNodeList itemNodes = doc.SelectNodes("//entry");
+			foreach (XmlNode itemNode in itemNodes)
+			{
+				XmlNode fname = itemNode.SelectSingleNode("fname");
+				XmlNode lname = itemNode.SelectSingleNode("lname");
+				XmlNode UNIV_ID = itemNode.SelectSingleNode("UNIV_ID");
+				XmlNode otherid1 = itemNode.SelectSingleNode("OTHER_ID_1");
+				XmlNode almabarcode = itemNode.SelectSingleNode("BARCODE");
+				XmlNode username = itemNode.SelectSingleNode("username");
+				XmlNode groupid = itemNode.SelectSingleNode("groupid");
+				XmlNode email = itemNode.SelectSingleNode("email");
+				XmlNode phone = itemNode.SelectSingleNode("phone");
+				XmlNode streetaddr1 = itemNode.SelectSingleNode("streetaddr1");
+				XmlNode streetaddr2 = itemNode.SelectSingleNode("streetaddr2");
+				XmlNode city = itemNode.SelectSingleNode("city");
+				XmlNode state = itemNode.SelectSingleNode("state");
+				XmlNode zipcode = itemNode.SelectSingleNode("zipcode");
+				XmlNode blockstatus = itemNode.SelectSingleNode("blockstatus");
+				XmlNode deptid = itemNode.SelectSingleNode("deptid");
+				XmlNode fines = itemNode.SelectSingleNode("fines");
+				XmlNode expdate = itemNode.SelectSingleNode("expdate");
+				XmlNode moddate = itemNode.SelectSingleNode("moddate");
 
-			    if ( strResponse.IndexOf("Requested record not found") != -1 )
-			    {
-				    strError += System.Configuration.ConfigurationSettings.AppSettings["errorNoPacRecord"];
-			    }
-			    else	
-			    {
+				if ( strResponse.IndexOf("Requested record not found") != -1 )
+				{
+					strError += System.Configuration.ConfigurationSettings.AppSettings["errorNoPacRecord"];
+				}
+				else	
+				{
 
-				    // assign entire response to PatronRecord field
-				    _PatronRecord = strResponse;
-				
-				    // parse out individual fields with regular expression object
+					// assign entire response to PatronRecord field
+					_PatronRecord = strResponse;
 
-				    // PATRON NAME
+					// parse out individual fields with regular expression object
 
-				    strLastName = lname.InnerXml;
-				    strFirstName = fname.InnerXml;
-                    if (strLastName == "" || strFirstName == "")
-				    {
-				    	strError += System.Configuration.ConfigurationSettings.AppSettings["errorBadName"];
-				    }
-				    // BARCODE
+					// PATRON NAME
 
-                    if (UNIV_ID != null)
-                    {
-                        strBarcode = UNIV_ID.InnerXml;
-                    }
-                    else if (almabarcode != null)
-                    {
-                        strBarcode = almabarcode.InnerXml;
-                    }
-                    else if (otherid1 != null)
-                    {
-                        strBarcode = otherid1.InnerXml;
-                    }
-                    else
-                    {
-                        strBarcode = username.InnerXml;
-                    }
+					strLastName = lname.InnerXml;
+					strFirstName = fname.InnerXml;
+					if (strLastName == "" || strFirstName == "")
+					{
+						strError += System.Configuration.ConfigurationSettings.AppSettings["errorBadName"];
+					}
+						    // BARCODE
 
-				    // USERNAME
+					if (UNIV_ID != null)
+					{
+						strBarcode = UNIV_ID.InnerXml;
+					}
+					else if (almabarcode != null)
+					{
+						strBarcode = almabarcode.InnerXml;
+					}
+					else if (otherid1 != null)
+					{
+						strBarcode = otherid1.InnerXml;
+					}
+					else
+					{
+						strBarcode = username.InnerXml;
+					}
 
-				    strUsername = username.InnerXml;
+					// USERNAME
 
-				    // PATRON TYPE
+					strUsername = username.InnerXml;
 
-				    strPatronType = groupid.InnerXml;
-                    if (strPatronType == "")
-				    {
-				    	strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingPatronTypeField"];
-				    }
+					// PATRON TYPE
 
-                    //IC 2014-10-28: add next three lines for VP's who have no CSUSM email.
-                    if (strPatronType == "8")
-                    {
-                        bolCampusUser = false;
-                    }
+					strPatronType = groupid.InnerXml;
+					if (strPatronType == "")
+					{
+						strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingPatronTypeField"];
+					}
 
-				    // DEPARTMENT
+					//IC 2014-10-28: add next three lines for VP's who have no CSUSM email.
+					if (strPatronType == "8")
+					{
+						bolCampusUser = false;
+					}
 
-				    strDept = deptid.InnerXml;
-                    if (strDept == "")
-                    {
-                        strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingDepartment"];
-                    }
-				    // E-MAIL
+					// DEPARTMENT
 
-				    strEmail = email.InnerXml;
-                    if (strEmail != "")
-			    	{
-					    // if this is campus user, make sure they have csusm e-mail address
-	    				// otherwise is affiliate user, so ignore
+					strDept = deptid.InnerXml;
+					if (strDept == "")
+					{
+						strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingDepartment"];
+					}
+					// E-MAIL
 
-                        if (strEmail.IndexOf("csusm") == -1 && bolCampusUser == true && strPatronType != "6")
-				    	{
-				    		strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingCSUSMEmail"];
-				    	}
-			    	}
-			    	else
-			    	{
-					    strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingEmail"];
-			    	}
+					strEmail = email.InnerXml;
+					if (strEmail != "")
+					{
+						// if this is campus user, make sure they have csusm e-mail address
+						// otherwise is affiliate user, so ignore
 
-				    // PHONE 
+						if (strEmail.IndexOf("csusm") == -1 && bolCampusUser == true && strPatronType != "6")
+						{
+							strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingCSUSMEmail"];
+						}
+					}
+					else
+					{
+						strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingEmail"];
+					}
 
-				    strPhone = phone.InnerXml;
-                    if (strPhone == ""){
-                        // for some reason, phone is never null in our ILLiad database
-					    strPhone = "No Record";
-                    }
+					// PHONE 
 
-				    // ADDRESS
+					strPhone = phone.InnerXml;
+					if (strPhone == ""){
+					// for some reason, phone is never null in our ILLiad database
+						strPhone = "No Record";
+					}
 
-				    strStreetAddress = streetaddr1.InnerXml;
+					// ADDRESS
+
+					strStreetAddress = streetaddr1.InnerXml;
 					strCity = city.InnerXml;
 					strState = state.InnerXml;
 					strZipcode = zipcode.InnerXml;
 
-                    if ( (strStreetAddress == "") || (strCity == "") || (strState == "") || (strZipcode == "")) 
+					if ( (strStreetAddress == "") || (strCity == "") || (strState == "") || (strZipcode == "")) 
 					{
 
 						// this is a non-standard entry
@@ -390,7 +390,7 @@ namespace Illiad
 							// this is a faculty or staff member, so let's just take the field
 							// in whatever way it comes
 
-                            strStreetAddress = streetaddr1.InnerXml;
+							strStreetAddress = streetaddr1.InnerXml;
 							strCity = "San Marcos";
 							strState = "CA";
 							strZipcode = "92096";
@@ -402,15 +402,15 @@ namespace Illiad
 
 				strFines = fines.InnerXml;
 
-                // MANUAL BLOCK ON RECORD
+				// MANUAL BLOCK ON RECORD
 
-                strMblock = blockstatus.InnerXml;
-                if (strMblock == "")
-                {
-                    strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingManualBlockField"];
-                }
+				strMblock = blockstatus.InnerXml;
+				if (strMblock == "")
+				{
+					strError += System.Configuration.ConfigurationSettings.AppSettings["errorMissingManualBlockField"];
+				}
 
-                // EXPIRATION DATE
+				// EXPIRATION DATE
 
 				strExpDate = expdate.InnerXml;
 				if (strExpDate == "")
@@ -452,7 +452,7 @@ namespace Illiad
 				_State = strState;
 				_Zipcode = strZipcode;
 				_MoneyOwed = strFines;
-                _ManualBlock = strMblock;
+				_ManualBlock = strMblock;
 
 				if ( strExpDate != "" )
 				{
@@ -483,23 +483,23 @@ namespace Illiad
 			// SQL statement
 			string strSQL = "UPDATE users " +
 
-							"SET FirstName = ?, " +
-							"LastName = ?, " +
-							"Phone = ?, " +
-							"EmailAddress = ?, " +
-							"Address = ?, " +
-							"City= ?, " +
-							"State = ?, " +
-							"Zip = ?, " +
-							"Department = ?, " +
-							"ExpirationDate = ?, " +
-							"LastChangedDate = ?, " +
-							"Status = ?, " +
-							"UserRequestLimit = ?, " +
-							"SSN = ? " +
+					"SET FirstName = ?, " +
+					"LastName = ?, " +
+					"Phone = ?, " +
+					"EmailAddress = ?, " +
+					"Address = ?, " +
+					"City= ?, " +
+					"State = ?, " +
+					"Zip = ?, " +
+					"Department = ?, " +
+					"ExpirationDate = ?, " +
+					"LastChangedDate = ?, " +
+					"Status = ?, " +
+					"UserRequestLimit = ?, " +
+					"SSN = ? " +
 
-							"FROM users " +
-							"WHERE username = ? ";
+					"FROM users " +
+					"WHERE username = ? ";
 					
 			OleDbCommand objCommand = new OleDbCommand(strSQL, objConn);
 			objCommand.Parameters.Add("FirstName", _FirstName);
@@ -516,9 +516,7 @@ namespace Illiad
 			objCommand.Parameters.Add("Status", Status);
 			objCommand.Parameters.Add("UserRequestLimit", UserRequestLimit);
 			objCommand.Parameters.Add("SSN", Barcode);
-
 			objCommand.Parameters.Add("Username", strUsername.ToLower());
-
 			
 			// execute SQL query
 			int iUpdated = objCommand.ExecuteNonQuery();
@@ -694,12 +692,12 @@ namespace Illiad
 			 *			continued use of older major designations by the Library.
 			 */
 
-            int iDept;
-            if (!int.TryParse(strDeptNumber, out iDept))
-            {
-                strDeptNumber = "99";
-            }
-            iDept = Convert.ToInt32(strDeptNumber);
+			int iDept;
+			if (!int.TryParse(strDeptNumber, out iDept))
+			{
+				strDeptNumber = "99";
+			}
+			iDept = Convert.ToInt32(strDeptNumber);
 
 			// convert all business disciplines to 'BUS'
 			if ( iDept == 6 ||	// BAAC
@@ -709,73 +707,72 @@ namespace Illiad
 				iDept == 10 ||	// BAMG
 				iDept == 11 ||	// BASS 
 				iDept == 12 	// BAMK
-				//iDept == 47 ||	// PBSU obsolete 2013
-				//iDept == 48		// PMBA obsolete 2013
+				//iDept == 47 ||// PBSU obsolete 2013
+				//iDept == 48	// PMBA obsolete 2013
 				)
 			{
-				iDept = 5;		// BUS
+				iDept = 5;	// BUS
 			}
 
 			// convert all biology disciplines to 'BIO'
 			if ( iDept == 2 ||	// BIOC
-				iDept == 4		// BIOT
-				)
+				iDept == 4 )	// BIOT
 			{
-				iDept = 3;		// BIO
+				iDept = 3;	// BIO
 			}
 
 			// convert all education disciplines to 'EDUC'
 			//if ( iDept == 33 )	// LBST
 			//{
-			//	iDept = 3;		// EDUC //Error corrected Feb 2013
+			//	iDept = 3;	// EDUC //Error corrected Feb 2013
 			//}
 
 			// convert all nursing disciplines to 'NURS'
-			if ( iDept == 41 || // NUVN
-                iDept == 49 ) // NURP, NUPP
+			if ( iDept == 41 || 	// NUVN
+				iDept == 49 ) 	// NURP, NUPP
 			{
-				iDept = 40;		// NURS
+				iDept = 40;	// NURS
 			}
 
 			// convert the Sociology disciplines to 'SOC'
-			if ( iDept == 58 ) // SP
+			if ( iDept == 58 ) 	// SP
 			{
-				iDept = 59;		// SOC
+				iDept = 59;	// SOC
 			}
 
 			// convert all Foreign Languages to 'FLA'
-			if ( iDept == 23 || // FREN added Feb 2013
-                iDept == 25 ) // GERM  added Feb 2013
+			if ( iDept == 23 || 	// FREN added Feb 2013
+				iDept == 25 ) 	// GERM  added Feb 2013
 			{
-				iDept = 60;		// FLA inc SPAN too
+				iDept = 60;	// FLA inc SPAN too
 			}
 
-            switch ( iDept )
+			switch ( iDept )
 			{
 				case 3 : return "BIO";
 				case 5 : return "BUS";
 				case 13 : return "CHEM";
-                case 14 : return "COG"; //added Feb 2013
-                case 15 : return "COM";		// Banner: COMM
+				case 14 : return "COG"; 	//added Feb 2013
+				case 15 : return "COM";		// Banner: COMM
 				case 16 : return "CSC";		// Banner: CS
 				case 17 : return "CRIM";
 				case 19 : return "ECON";
 				case 20 : return "EDUC";
-                case 21 : return "BRST"; //added Feb 2013
-                case 22 : return "ETHN"; //added Feb 2013
-                case 24 : return "GEOG"; //added Feb 2013
-                case 26 : return "GLOB"; //added Feb 2013
-                case 27 : return "HIST";
+				case 21 : return "BRST"; 	//added Feb 2013
+				case 22 : return "ETHN"; 	//added Feb 2013
+				case 24 : return "GEOG"; 	//added Feb 2013
+				case 26 : return "GLOB"; 	//added Feb 2013
+				case 27 : return "HIST";
 				case 29 : return "HDEV";
 				case 32 : return "KIN";		// Banner: KINE
-                case 33 : return "LBST";  //LBST own category as of Feb 2013
-                case 34 : return "LING"; //added Feb 2013
-                case 35 : return "LTWR";
-                case 36 : return "MASS"; //added Feb 2013
+				case 33 : return "LBST";  	//LBST own category as of Feb 2013
+				case 34 : return "LING"; 	//added Feb 2013
+				case 35 : return "LTWR";
+				case 36 : return "MASS"; 	//added Feb 2013
 				case 37 : return "MATH";
-                case 38 : return "NATV"; //added Feb 2013
+				case 38 : return "NATV"; 	//added Feb 2013
 				case 40 : return "NURS";
-                case 43 : return "PHYS"; //added Feb 2013
+				case 43 : return "PHYS"; 	//added Feb 2013
 				case 45 : return "PSCI";
 				case 50 : return "PSY";		// Banner: PSYC
 				case 56 : return "SSC";		// Banner: SS
@@ -784,7 +781,7 @@ namespace Illiad
 				case 61 : return "SPE";		// Banner: SPEC
 				case 65 : return "VPA";		// Banner: ARTS
 				case 69 : return "WMST";
-				case 70 : return "EDUC";    // For Joint Doctoral Program
+				case 70 : return "EDUC";    	// For Joint Doctoral Program
 				case 98 : return "UND";		// Changed from 63 Feb 2013	
 				case 99 : return "NOM";		// ADDED Feb 2013 to catch gaps	
 
@@ -962,23 +959,23 @@ namespace Illiad
 			}
 		}
 
-        private bool CheckForManualBlock(string strBlock)
-        {
-            /*
-             * Purpose: checks to see if library has place a hold on record
-             * Accepts: strBlock = value from MBlock patron field
-             * Returns: True if '-', which means not blocked
-             */
-            switch (strBlock)
-            {
-                case "-": // no block
-                    return true;
-                default:
-                    return false;
-            }
-        }
+		private bool CheckForManualBlock(string strBlock)
+		{
+		    /*
+		     * Purpose: checks to see if library has place a hold on record
+		     * Accepts: strBlock = value from MBlock patron field
+		     * Returns: True if '-', which means not blocked
+		     */
+		    switch (strBlock)
+		    {
+			case "-": // no block
+			    return true;
+			default:
+			    return false;
+		    }
+		}
 
-        private bool CheckMoneyOwed ( string strAmount )
+		private bool CheckMoneyOwed ( string strAmount )
 		{
 			/*
 			 * Purpose:	Checks to see if the current fines exceed the limit
@@ -1029,7 +1026,7 @@ namespace Illiad
 			
 			string strResult = "";
 			string PATRON_API = System.Configuration.ConfigurationSettings.AppSettings["PartonAPI"];
-            strResult = PATRON_API += strKey;
+			strResult = PATRON_API += strKey;
 			
 			return strResult;
 		}
