@@ -31,7 +31,7 @@ protected void Page_Load(Object Src, EventArgs E)
 </head>
 <body>
 <div align="center">
-<!--#include virtual="/login/includes/sub_header.asp"-->
+
   <p>&nbsp;</p>
   <table width="400" border="0" cellpadding="10" bgcolor="#EFEFEF">
       <tr>
@@ -53,7 +53,7 @@ protected void Page_Load(Object Src, EventArgs E)
     </table>
 	<p>&nbsp; </p>
 
-<!--#include virtual="/login/includes/sub_footer.asp"-->
+
 </div>
 </body>
 </html>
